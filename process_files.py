@@ -1,4 +1,4 @@
-import get_object_manager as manager
+import pyManager as pm
 
 __author__ = 'Andrew James Collett'
 
@@ -12,23 +12,25 @@ def is_num(ref):
 
 
 def get_manager_info(host, user, business):
-    nav_path_customers = [business, 'Customer']
-    nav_path_invoices = [business, 'SalesInvoice']
 
-    gom = manager.manager_objects(host, user)
-    customers = gom.get_json_object(nav_path_customers)
-    invoices = gom.get_json_object(nav_path_invoices)
+    manager_object = pm.manager_object(host, user, business)
+    customers = manager_object.get_customers()
+    sales_invoices = manager_object.get_sales_invoices()
+    tracking_codes = manager_object.get_tracking_codes()
+    bank_accounts = manager_object.get_cash_accounts()
+    inventory_items = manager_object.get_inventory()
+    accounts = manager_object.get_profit_loss_accounts()
 
-    emails = list()
-    refs = list()
-
-    for customer in customers:
-        emails.append(customer['Email'])
-
-    for invoice in invoices:
-        refs.append(invoice['Reference'])
-
-    return emails, refs
+    # emails = list()
+    # refs = list()
+    #
+    # for customer in customers:
+    #     emails.append(customer['Email'])
+    #
+    # for invoice in invoices:
+    #     refs.append(invoice['Reference'])
+    #
+    # return emails, refs
 
 
 def create_invoices_dict(invoices, OrderID, Date, Title, Qty, Price, Email,
@@ -87,6 +89,33 @@ def get_data(invoice_file, statement_file, m_emails, m_refs):
     return invoices
 
 
+def __main__():
+    user = 'api'
+    host = 'https://manager.procsum.co.za'
+    # invoice_file = open('invoice.csv', 'r')
+    # statement_file = open('statement.csv', 'r')
+    # inv_proc = open('process.csv', 'w')
+    # customers = open('customers.csv', 'w')
+
+    # m_emails, m_refs = get_manager_info(host, user, 'ProcSum')
+    get_manager_info(host, user, 'ProcSum')
+
+    # invoices = get_data(invoice_file, statement_file, m_emails, m_refs)
+
+    # keys = invoices.keys()
+    # keys.sort()
+    # keys.reverse()
+
+    # customers.write('Name	Email' + '\n')
+
+    # for key in keys:
+    #     write_files(invoices[key], inv_proc, customers)
+
+
+if __name__ == "__main__":
+    __main__()
+
+"""
 def write_files(order, inv_proc, customers):
 
     transs = order['transactions']
@@ -111,28 +140,24 @@ def write_files(order, inv_proc, customers):
 
     inv_proc.write('\n')
 
+def get_manager_info(host, user, business):
+    nav_path_customers = [business, 'Customer']
+    nav_path_invoices = [business, 'SalesInvoice']
 
-def __main__():
-    user = 'api'
-    host = 'manager.procsum.co.za'
-    invoice_file = open('invoice.csv', 'r')
-    statement_file = open('statement.csv', 'r')
-    inv_proc = open('process.csv', 'w')
-    customers = open('customers.csv', 'w')
+    gom = manager.manager_objects(host, user)
+    customers = gom.get_json_object(nav_path_customers)
+    invoices = gom.get_json_object(nav_path_invoices)
 
-    m_emails, m_refs = get_manager_info(host, user, 'ProcSum')
+    emails = list()
+    refs = list()
 
-    invoices = get_data(invoice_file, statement_file, m_emails, m_refs)
+    for customer in customers:
+        emails.append(customer['Email'])
 
-    keys = invoices.keys()
-    keys.sort()
-    keys.reverse()
+    for invoice in invoices:
+        refs.append(invoice['Reference'])
 
-    customers.write('Name	Email' + '\n')
-
-    for key in keys:
-        write_files(invoices[key], inv_proc, customers)
+    return emails, refs
 
 
-if __name__ == "__main__":
-    __main__()
+"""

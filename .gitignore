@@ -1,6 +1,7 @@
 # some other stuff that is not needed
 *.csv
 *.xlsx
+pyManager.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
