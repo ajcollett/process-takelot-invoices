@@ -58,7 +58,7 @@ def create_invoices_dict(invoices, OrderID, Date, Title, Qty, Price, Email,
     """Create the Invoices dict and add details to it."""
     if is_num(OrderID):
         if Email in m_emails:
-            log_file.write(Email + ' is in Manager already')
+            log_file.write(Email + ' is in Manager already\n')
         else:
             try:
                 invoices[OrderID]['items'].append([Title, Qty])
@@ -78,7 +78,7 @@ def add_to_dict(invoices, T_Dt, T_Tp, T_ID, T_Des, Cus,
         ref = Ref.split()[2].replace(')', '').strip()
         if is_num(ref):
             if ref in m_refs:
-                log_file.write(ref + ' is in Manager already')
+                log_file.write(ref + ' is in Manager already \n')
             else:
                 try:
                     invoices[str(ref)]['name'] = Cus
@@ -87,7 +87,8 @@ def add_to_dict(invoices, T_Dt, T_Tp, T_ID, T_Des, Cus,
                         'date': T_Dt, 'type': T_Tp, 'description': T_Des,
                         'amount': In_VAT}
                 except (KeyError) as e:
-                    log_file.write("This key is not in the dictionary", e)
+                    log_file.write("This key is not in the dictionary" + e +
+                                   "\n")
 
     except IndexError as e:
         return
@@ -121,14 +122,18 @@ def __main__():
     m_emails = list()
     m_refs = list()
 
-    try:
-        for customer in customers:
+    for customer in customers:
+        try:
             m_emails.append(customers[customer]['Email'])
+        except:
+            log_file.write("An error occured or," +
+                           "This key is not in the dictionary: " + customer +
+                           '\n')
 
-        for invoice in invoices:
-            m_refs.append(invoices[invoice]['Reference'])
-    except (KeyError) as e:
-        log_file.write("This key is not in the dictionary", e)
+    for invoice in invoices:
+        m_refs.append(invoices[invoice]['Reference'])
+
+    invoices = get_data(invoice_file, statement_file, m_emails, m_refs)
 
     # TODO check all the things
     # (self, issue_date, ref, to, lines)
@@ -169,25 +174,4 @@ def write_files(order, inv_proc, customers):
                 trans['amount'] + '\n'))
 
     inv_proc.write('\n')
-
-def get_manager_info(host, user, business):
-    nav_path_customers = [business, 'Customer']
-    nav_path_invoices = [business, 'SalesInvoice']
-
-    gom = manager.manager_objects(host, user)
-    customers = gom.get_json_object(nav_path_customers)
-    invoices = gom.get_json_object(nav_path_invoices)
-
-    emails = list()
-    refs = list()
-
-    for customer in customers:
-        emails.append(customer['Email'])
-
-    for invoice in invoices:
-        refs.append(invoice['Reference'])
-
-    return emails, refs
-
-
 """
