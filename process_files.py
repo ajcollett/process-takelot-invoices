@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """A large script to do a simple job, enter invoices into Manager."""
 import pyManager as pm
 
@@ -87,8 +90,8 @@ def add_to_dict(invoices, T_Dt, T_Tp, T_ID, T_Des, Cus,
                         'date': T_Dt, 'type': T_Tp, 'description': T_Des,
                         'amount': In_VAT}
                 except (KeyError) as e:
-                    log_file.write("This key is not in the dictionary" + e +
-                                   "\n")
+                    log_file.write("This key is not in the dictionary" +
+                                   str(e) + "\n")
 
     except IndexError as e:
         return
@@ -125,10 +128,10 @@ def __main__():
     for customer in customers:
         try:
             m_emails.append(customers[customer]['Email'])
-        except:
+        except (KeyError) as e:
             log_file.write("An error occured or," +
                            "This key is not in the dictionary: " + customer +
-                           '\n')
+                           str(e) + '\n')
 
     for invoice in invoices:
         m_refs.append(invoices[invoice]['Reference'])
@@ -138,10 +141,13 @@ def __main__():
     # TODO check all the things
     # (self, issue_date, ref, to, lines)
 
+    print('Got all the info.\n')
+
     for ref in invoices:
         m_o.post_customer(name=invoices[ref]['name'],
                           email=invoices[ref]['email'])
 
+    print('Printed all the things.\n')
     final_customers = m_o.get_customers()
 
     # for ref in invoices:
