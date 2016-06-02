@@ -125,16 +125,16 @@ def __main__():
     m_emails = list()
     m_refs = list()
 
- #   for customer in customers:
-  #      try:
-  #          m_emails.append(customers[customer]['Email'])
-  #      except (KeyError) as e:
-  #          log_file.write("An error occured or," +
-   #                        "This key is not in the dictionary: " + customer +
-    #                       str(e) + '\n')
+    for customer in customers:
+        try:
+            m_emails.append(customers[customer]['Email'])
+        except (KeyError) as e:
+            log_file.write("An error occured or," +
+                           "This key is not in the dictionary: " + customer +
+                           str(e) + '\n')
 
-#    for invoice in invoices:
-#        m_refs.append(invoices[invoice]['Reference'])
+    for invoice in invoices:
+        m_refs.append(invoices[invoice]['Reference'])
 
     invoices = get_data(invoice_file, statement_file, m_emails, m_refs)
 
@@ -150,8 +150,8 @@ def __main__():
     print('Posted all the things.\n')
     final_customers = m_o.get_customers()
 
-    # for ref in invoices:
-    #     man.post_sales_invoice(issue_date=order['date'], ref=ref, to=)
+    for ref in invoices:
+        man.post_sales_invoice(issue_date=order['date'], ref=ref, to=)
 
 if __name__ == "__main__":
     __main__()
