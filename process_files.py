@@ -119,22 +119,22 @@ def __main__():
     host = 'https://manager.procsum.co.za'
     invoice_file = open('invoice.csv', 'r')
     statement_file = open('statement.csv', 'r')
-    m_o, customers, invoices, items, static_info = get_manager_info(
-        host, user, 'ProcSum')
+#    m_o, customers, invoices, items, static_info = get_manager_info(
+#        host, user, 'ProcSum')
 
     m_emails = list()
     m_refs = list()
 
-    for customer in customers:
-        try:
-            m_emails.append(customers[customer]['Email'])
-        except (KeyError) as e:
-            log_file.write("An error occured or," +
-                           "This key is not in the dictionary: " + customer +
-                           str(e) + '\n')
+ #   for customer in customers:
+  #      try:
+  #          m_emails.append(customers[customer]['Email'])
+  #      except (KeyError) as e:
+  #          log_file.write("An error occured or," +
+   #                        "This key is not in the dictionary: " + customer +
+    #                       str(e) + '\n')
 
-    for invoice in invoices:
-        m_refs.append(invoices[invoice]['Reference'])
+#    for invoice in invoices:
+#        m_refs.append(invoices[invoice]['Reference'])
 
     invoices = get_data(invoice_file, statement_file, m_emails, m_refs)
 
@@ -147,7 +147,7 @@ def __main__():
         m_o.post_customer(name=invoices[ref]['name'],
                           email=invoices[ref]['email'])
 
-    print('Printed all the things.\n')
+    print('Posted all the things.\n')
     final_customers = m_o.get_customers()
 
     # for ref in invoices:
