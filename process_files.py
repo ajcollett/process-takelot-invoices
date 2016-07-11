@@ -29,10 +29,13 @@ def get_manager_info(host, user, business):
     sales_items = manager_object.get_inventory()
     sales_items_new = dict()
     for item_ref in sales_items:
-        sales_items_new[sales_items[item_ref]['Code']] = {
-            'Id': item_ref,
-            'Description': sales_items[item_ref]['Description'],
-        }
+        item = dict()
+        item = sales_items[item_ref]
+        item['Code'] = item_ref
+        # sales_items_new[sales_items[item_ref]['Code']] = {
+        #     'Id': item_ref,
+        #     'Description': sales_items[item_ref]['Description'],
+        # }
 
     sales_items = sales_items_new
     log_file.write('We got sales Items\n')
